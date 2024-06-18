@@ -14,7 +14,7 @@ class BinomialHeap {
         Node* child;
         Node* sibling;
 
-        explicit Node(T k) : key(k), degree(0), parent(nullptr), child(nullptr), sibling(nullptr) {}
+        explicit Node(const T& k) : key(k), degree(0), parent(nullptr), child(nullptr), sibling(nullptr) {}
     };
 
     Node* _head = nullptr;
@@ -35,8 +35,8 @@ class BinomialHeap {
         if (!h1) return h2;
         if (!h2) return h1;
 
-        Node* newHead = nullptr;
-        Node** pos = &newHead;
+        Node* new_head = nullptr;
+        Node** pos = &new_head;
 
         while (h1 && h2) {
             if (h1->degree <= h2->degree) {
@@ -51,7 +51,7 @@ class BinomialHeap {
         }
 
         *pos = h1 ? h1 : h2;
-        return newHead;
+        return new_head;
     }
 
     void adjustHeap() {
@@ -86,7 +86,7 @@ class BinomialHeap {
         }
     }
 
-    Node* findNode(Node* node, const T key) const {
+    Node* findNode(Node* node, const T& key) const {
         if (!node) return nullptr;
         if (node->key == key) return node;
 
@@ -148,8 +148,8 @@ public:
         T min = minNode->key;
 
         if (minNode->child) {
-            Node* newHead = reverseChildList(minNode->child);
-            _head = unionHeaps(_head, newHead);
+            Node* new_head = reverseChildList(minNode->child);
+            _head = unionHeaps(_head, new_head);
         }
 
         delete minNode;
@@ -159,12 +159,12 @@ public:
 
     void deleteKey(const T& key) {
         if (auto node = findNode(_head, key)) {
-            decreaseKey(node, std::numeric_limits<T>::min());
+            updateValue(node, std::numeric_limits<T>::min());
             extractMin();
         }
     }
 
-    void decreaseKey(Node* node, const T& newKey) {
+    void updateValue(Node* node, const T& newKey) {
         if (_comp(newKey, node->key)) throw std::invalid_argument("New key is greater than old key");
 
         node->key = newKey;

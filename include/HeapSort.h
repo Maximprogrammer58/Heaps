@@ -1,8 +1,8 @@
 #ifndef HEAP_INCLUDE_HEAPSORT_H
 #define HEAP_INCLUDE_HEAPSORT_H
 
-#include "../include/BinomialHeap.h"
-#include "../include/Heap.h"
+#include "BinomialHeap.h"
+#include "Heap.h"
 
 template<typename T>
 std::vector<T> ascendingHeapSort(std::vector<T>& data) {

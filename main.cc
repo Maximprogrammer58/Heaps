@@ -1,33 +1,85 @@
-#include "include/HeapSort.h"
+#include <algorithm>
+#include <numeric>
+#include <vector>
+#include <chrono>
+#include <random>
 
-template <typename T>
-void print(const std::vector<T>& data) {
-	for (const T& value : data) {
-		std::cout << value << " ";
-	}
-	std::cout << std::endl;
+#include "include/HeapSort.h"
+#include "include/FibonacciHeap.h"
+#include "include/Graph.h"
+
+template <typename Func>
+double measureTime(Func func) {
+    auto start = std::chrono::high_resolution_clock::now();
+    func();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = end - start;
+    return elapsed.count();
 }
 
 int main() {
-	setlocale(LC_ALL, "Rus");
-	std::vector data = { 5, 6, 0, 1, 9, 18, 10 };
-	std::cout << "Результаты" << std::endl;
-	std::cout << "Исходный массив: ";
-	print(data);
-	std::cout << "После HeapSort: ";
-	print(ascendingHeapSort(data));
-	std::vector<int> mas = { 13, 42, 90, 74, 51, 14, 60, 8, 15 };
-	BinaryHeap<int> heap(mas);
-	heap.print();
-	std::optional<int> max = heap.extractMax();
-	if (max) {
-		std::cout << *max << std::endl;
-	}
-	heap.print();
-	heap.insert(98);
-	heap.print();
-	std::cout << "..........................." << std::endl;
-	BinomialHeap<int> b_heap(mas);
-	std::cout << *b_heap.extractMin() << std::endl;
-	std::cout << *b_heap.extractMin() << std::endl;
+    const int NUM_EXPERIMENTS = 20;
+
+    for (int num = 1000; num <= 50000; num += 10000) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        std::uniform_int_distribution<> dis(1, 1000);
+
+        std::vector<int> data(num);
+        for (int& i : data) {
+            i = dis(gen);
+        }
+
+        std::cout << "Insert" << std::endl;
+        std::cout << "SIZE = " << num << std::endl;
+        double HeapInsertTime = 0;
+        for (int i = 0; i < NUM_EXPERIMENTS; ++i) {
+            BinaryHeap<int> heap;
+            HeapInsertTime += measureTime([&]() {
+                for (int x : data) {
+                    heap.insert(x);
+                }
+                });
+        }
+        std::cout << "Binary Heap: " << HeapInsertTime / NUM_EXPERIMENTS << " ms" << std::endl;
+
+        std::cout << "SIZE = " << num << std::endl;
+        HeapInsertTime = 0;
+        for (int i = 0; i < NUM_EXPERIMENTS; ++i) {
+            BinomialHeap<int> b_heap;
+            HeapInsertTime += measureTime([&]() {
+                for (int x : data) {
+                    b_heap.insert(x);
+                }
+                });
+        }
+        std::cout << "Binomial Heap: " << HeapInsertTime / NUM_EXPERIMENTS << " ms" << std::endl;
+
+
+        std::cout << "Extract min/max" << std::endl;
+        std::cout << "SIZE = " << num << std::endl;
+        double HeapExtractTime = 0;
+        for (int i = 0; i < NUM_EXPERIMENTS; ++i) {
+            BinaryHeap<int> heap;
+            HeapInsertTime += measureTime([&]() {
+                for (int x : data) {
+                    heap.extractMax();
+                }
+                });
+        }
+        std::cout << "Binary Heap: " << HeapExtractTime / NUM_EXPERIMENTS << " ms" << std::endl;
+
+        std::cout << "SIZE = " << num << std::endl;
+        HeapExtractTime = 0;
+        for (int i = 0; i < NUM_EXPERIMENTS; ++i) {
+            BinomialHeap<int> b_heap;
+            HeapInsertTime += measureTime([&]() {
+                for (int x : data) {
+                    b_heap.extractMin();
+                }
+                });
+        }
+        std::cout << "Binomial Heap: " << HeapExtractTime / NUM_EXPERIMENTS << " ms" << std::endl;
+    }
 }
