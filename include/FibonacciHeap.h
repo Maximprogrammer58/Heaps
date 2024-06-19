@@ -7,6 +7,7 @@
 #include <limits>
 #include <unordered_map>
 #include <functional>
+#include <optional>
 
 template <typename T, typename Comparator = std::less<T>>
 class FibonacciHeap {
@@ -142,7 +143,13 @@ private:
     }
 
 public:
-    FibonacciHeap() : minNode(nullptr), nodeCount(0), compare(Comparator()) {}
+    FibonacciHeap() : minNode(nullptr), nodeCount(0), compare(Comparator()) {} 
+
+    FibonacciHeap(const std::vector<T>& data) : minNode(nullptr), nodeCount(0), compare(Comparator()) {
+        for (const T& value : data) {
+            insert(value);
+        }
+    }
 
     ~FibonacciHeap() {
         clear();
@@ -175,13 +182,13 @@ public:
         nodeCount++;
     }
 
-    T getMin() const {
-        if (!minNode) throw std::runtime_error("Heap is empty");
+    std::optional<T> getMin() const {
+        if (!minNode) return std::nullopt;
         return minNode->key;
     }
 
-    T extractMin() {
-        if (!minNode) throw std::runtime_error("Heap is empty");
+    std::optional<T> extractMin() {
+        if (!minNode) return std::nullopt;
 
         Node* z = minNode;
         if (z != nullptr) {

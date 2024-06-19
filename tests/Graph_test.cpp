@@ -32,6 +32,7 @@ int main() {
     graph.add_edge(1, 3, 4);
     graph.add_edge(5, 4, 5);
 
+    
     graph.print();
 
     double distance = 0.0;
@@ -50,6 +51,7 @@ int main() {
     }
     std::cout << "Distance from 1 to 4 =  " << distance << std::endl;
 
+    std::cout << "Time measurement" << std::endl;
 
     double time1 = 0;
     for (int i = 0; i < NUM_EXPERIMENTS; ++i) {
@@ -59,7 +61,7 @@ int main() {
         std::chrono::duration<double, std::milli> elapsed = end - start;
         time1 += elapsed.count();
     }
-    std::cout << "Priority Queue: " << time1 / NUM_EXPERIMENTS << " ms" << std::endl;
+    std::cout << "Dijkstra's algorithm with priority queue: " << time1 / NUM_EXPERIMENTS << " ms" << std::endl;
 
     double time2 = 0;
     for (int i = 0; i < NUM_EXPERIMENTS; ++i) {
@@ -69,7 +71,7 @@ int main() {
         std::chrono::duration<double, std::milli> elapsed = end - start;
         time2 += elapsed.count();
     }
-    std::cout << "Fibonacci Heap: " << time2 / NUM_EXPERIMENTS << " ms" << std::endl;
+    std::cout << "Dijkstra's algorithm with Fibonacci heap: " << time2 / NUM_EXPERIMENTS << " ms" << std::endl;
 
     return 0;
 }

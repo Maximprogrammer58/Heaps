@@ -15,9 +15,17 @@ double measureTimeSort(std::vector<T>& data) {
     return elapsed.count();
 }
 
-int main() {
+template <typename T>
+void print(const std::vector<T>& data) {
+    for (const T& value : data) {
+        std::cout << value << " ";
+    }
+    std::cout << std::endl;
+}
 
-    for (int num = 1000; num <= 50000; num += 10000) {
+int main() {
+    
+    for (int num = 1000; num <= 50000; num += 5000) {
         std::vector<int> ascending_data(num);
         for (int i = 0; i < num; i++) {
             ascending_data[i] = i + 1;
@@ -42,6 +50,21 @@ int main() {
         std::cout << "SIZE: " << num << std::endl;
         std::cout << "Descending HeapSort: " << measureTimeSort(descending_data) << std::endl;
     }
+
+    std::vector<int> data(10);
+ 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 100);;
+    for (int& i : data) {
+        i = dis(gen);
+    }
+    std::cout << "Vector: ";
+    print(data);
+    std::cout << "Sorted using BinaryMaxHeap: ";
+    print(descendingHeapSort(data));
+    std::cout << "Sorted using BinomailMinHeap: ";
+    print(ascendingHeapSort(data));
 
 	return 0;
 }

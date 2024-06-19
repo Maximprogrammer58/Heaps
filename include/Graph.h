@@ -245,7 +245,7 @@ public:
         pq.insert(Node{ 0, from });
 
         while (!pq.isEmpty()) {
-            Vertex u = pq.extractMin().vertex;
+            Vertex u = (*pq.extractMin()).vertex;
 
             if (u == to) {
                 std::vector<Edge> path;
