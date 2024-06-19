@@ -30,7 +30,6 @@ target_include_directories(FibonacciHeap PUBLIC "include")
 add_library(Graph SHARED "include/Graph.h" "src/Graph.cc")
 target_include_directories(Graph PUBLIC "include")
 
-
 add_executable(main "main.cc")
 target_link_libraries(main Heap BinomialHeap FibonacciHeap)
 
